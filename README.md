@@ -13,3 +13,6 @@ About Dataset
 This data set contains information on user preference data from 73,516 users on 12,294 anime. Each user is able to add anime to their completed list and give it a rating and this data set is a compilation of those ratings.
 
 Data Source: https://www.kaggle.com/CooperUnion/anime-recommendations-database
+
+How to Use it:
+The give_rec('Name of the anime you want to find other animes similar to') gives the dataframe of top 10 similar animes with their similarity scores.
