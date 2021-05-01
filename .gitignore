@@ -1,2 +1,4 @@
 
 .ipynb_checkpoints/Anime recommendation-checkpoint.ipynb
+*.ipynb
+.ipynb_checkpoints/Anime recommendation-checkpoint.ipynb
