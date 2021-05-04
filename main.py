@@ -51,7 +51,7 @@ Swagger(app)
 
 @app.route('/')
 def base_route():
-    return "Welcome to Anirudh's Content Based Anime Recommendation System. You can test with /predict?title=Naruto or /predict?title=Gintama"
+    return "Welcome to Anirudh's Content Based Anime Recommendation System. You can test with /recommend?title=Naruto or /recommend?title=Gintama"
 
 @app.route('/recommend', methods = ['GET'])
 def recommend():
@@ -67,5 +67,5 @@ def recommend():
     return f'The top 3 recommendations for you are {first}, {second} and {third}'
 
 if __name__ == '__main__':
-    app.run(debug = True, host="127.0.0.1", port=2000)
+    app.run(debug = True)
 
