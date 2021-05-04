@@ -2,7 +2,5 @@ fastapi
 uvicorn
 numpy
 pandas
-pickle
 sklearn
 flasgger
-re
