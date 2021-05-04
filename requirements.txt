@@ -1,6 +1,8 @@
-fastapi
+Flask==0.12.2
 uvicorn
 numpy
 pandas
 sklearn
 flasgger
+gunicorn
+scikit-learn
