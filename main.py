@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 import pickle
-from sklearn.metrics.pairwise import sigmoid_kernel
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # load dataset
 anime_data = pd.read_csv('cleaned_anime.csv')
