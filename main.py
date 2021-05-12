@@ -1,43 +1,55 @@
 import numpy as np
 import pandas as pd
 import pickle
-from sklearn.metrics.pairwise import sigmoid_kernel
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # load dataset
-anime_data = pd.read_csv('cleaned_anime.csv')
+#anime_data = pd.read_csv('cleaned_anime.csv')
 
-# TF-IDF vectorizer Matrix from Pickle
-with open('tfv_matrix', 'rb') as f:
-    tfv_matrix = pickle.load(f)
+# if it doesn't exist
+def create_sim():
+    anime_data = pd.read_csv('cleaned_anime.csv')
+    # creating a count matrix
+    cv = CountVectorizer()
+    count_matrix = cv.fit_transform(anime_data['genre'].values.astype('U'))
+    # creating a similarity score matrix
+    sim = cosine_similarity(count_matrix)
+    return anime_data,sim
 
-# Compute the sigmoid kernel
-sigmoid_matrix = sigmoid_kernel(tfv_matrix, tfv_matrix)
+# defining a function that recommends 10 most similar movies
+def rcmd(m):
+    m = m.lower()
+    # check if data and sim are already assigned
+    try:
+        anime_data.head()
+        sim.shape
+    except:
+        anime_data, sim = create_sim()
+    # check if the movie is in our database or not
+    if m not in anime_data['name'].unique():
+        return('This anime is not in our database.\nPlease check if you spelled it correct.')
+    else:
+        # getting the index of the movie in the dataframe
+        i = anime_data.loc[anime_data['name']==m].index[0]
 
-# Indices to find the anime
-indices = pd.Series(anime_data.index, index = anime_data['name']).drop_duplicates()
+        # fetching the row containing similarity scores of the movie
+        # from similarity matrix and enumerate it
+        lst = list(enumerate(sim[i]))
 
-# Recommendation Function
+        # sorting this list in decreasing order based on the similarity score
+        lst = sorted(lst, key = lambda x:x[1] ,reverse=True)
 
-def give_rec(title, sig = sigmoid_matrix):
-    # Get index corresponding to original title
-    idx = indices[title]
+        # taking top 1- movie scores
+        # not taking the first index since it is the same movie
+        lst = lst[1:4]
 
-    # Get the pairwise similarity Scores
-    sig_scores = list(enumerate(sig[idx]))
-
-    # Sort the animes
-    sig_scores = sorted(sig_scores, key = lambda x: x[1], reverse=True)
-
-    # Anime indices
-    anime_indices = [i[0] for i in sig_scores]
-
-    recommendation = pd.DataFrame({'Anime name' : anime_data['name'].
-        iloc[anime_indices].values,
-        'Rating' : anime_data['rating'].iloc[anime_indices].values})
-
-    return  recommendation['Anime name'][0], recommendation['Anime name'][1], recommendation['Anime name'][2]
-
-
+        # making an empty list that will containg all 10 movie recommendations
+        l = []
+        for i in range(len(lst)):
+            a = lst[i][0]
+            l.append(anime_data['name'][a])
+        return l
 
 
     
@@ -63,9 +75,15 @@ def recommend():
         required: true
     """
     title = request.args.get('title') # Get the title name from the user
-    first, second, third = give_rec(title) # Top 3 similar Anime
-    return f'The top 3 recommendations for you are {first}, {second} and {third}'
+    r = rcmd(title) # Top 3 similar Anime
+    return f'The top 3 recommendations for you are {r}'
 
 if __name__ == '__main__':
     app.run(debug = True)
 
+# snapshot = tracemalloc.take_snapshot()
+# top_stats = snapshot.statistics('lineno')
+
+# print("[top 10 ]")
+# for stat in top_stats[:10]:
+#     print(stat)
