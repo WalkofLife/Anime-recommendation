@@ -63,7 +63,7 @@ Swagger(app)
 
 @app.route('/')
 def base_route():
-    return "Welcome to Anirudh's Content Based Anime Recommendation System. You can test with /recommend?title=Naruto or /recommend?title=Gintama"
+    return "Welcome to Anirudh's Content Based Anime Recommendation System. You can test with /recommend?title=Naruto or /recommend?title=Gintama \n But this doesn't work in  Heroku due to Error R15 (Memory quota vastly exceeded), but works offline. I think this can be solved by buying more dynos"
 
 @app.route('/recommend', methods = ['GET'])
 def recommend():
