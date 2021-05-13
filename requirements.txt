@@ -6,5 +6,4 @@ sklearn
 flasgger
 gunicorn
 scikit-learn
-uvloop
-httptools
+
