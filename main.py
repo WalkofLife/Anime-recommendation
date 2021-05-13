@@ -79,7 +79,8 @@ def recommend():
     return f'The top 3 recommendations for you are {r}'
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    uvicorn.run(app)
+    #app.run(debug = True)
 
 # snapshot = tracemalloc.take_snapshot()
 # top_stats = snapshot.statistics('lineno')
